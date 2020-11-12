@@ -383,6 +383,8 @@ pix2pix 模型之訓練方式是輸入一對照片，其中一張照片為輸入
 
 
 \subsection{訓練貼圖模型}
+
+\subsubsection{訓練基礎pix2pix模型}
 生成完貼圖模型的訓練資料集後，我們先訓練最基本的pix2pix模型。我們利用pix2pix模型所提供的train.py程式碼進行訓練，訓練指令如下：
 
 \begin{center}
@@ -390,17 +392,19 @@ pix2pix 模型之訓練方式是輸入一對照片，其中一張照片為輸入
 \end{center}
 
 
-\subsection{訓練VAE-pix2pix模型}
-在~\ref{sec:5}~中提到我們是在pix2pix模型的架構下加入自行建構的VAE，故訓練指令與上述指令的差異只在model參數的不同，下述指令的vae\_pix2pix即為本研究的模型結構：
+
+
+\subsubsection{訓練本研究提出的模型}
+在~\textbf{\ref{sec:5}\nameref{sec:5}}~中提到我們是在pix2pix模型的架構下加入自行建構的VAE，故訓練指令與上述指令的差異只在model參數的不同，下述指令的vae\_pix2pix即為本研究的模型結構：
 
 \begin{center}
 \texttt{python train.py --model vae\_pix2pix --name vae\_sat\_all -–dataroot datasets/height29 \_10km\_pix2pix\_sat\_all --direction AtoB –-input\_nc 1 -–output\_nc 3}
 \end{center}
 
-兩個貼圖模型的具體訓練結果會於研究結果與討論中進行說明。
+兩個貼圖模型的具體訓練結果會於\textbf{~\nameref{sec:3}~}中進行說明。
 
 \subsection{訓練地形擬真模型}
-在訓練原pix2pix模型與本研究建構的模型前，我們先對兩個模型內的pix2pix進行以下調整：
+在訓練原pix2pix模型與本研究建構的模型前，我們先對兩個模型內的pix2pix進行以下調整。
 \subsubsection{對pix2pix模型進行調整}
 pix2pix模型原本是針對「一般圖片的風格轉換」這項工作設計的，這裡指的是像素值有固定上下界且通常有RGB三數值的圖片。這和我們－「生成擬真山脈」性質上有些許不同，所以我們調整pix2pix模型使其符合需求(如圖~\ref{fig:13}~)：
 \begin{enumerate}
@@ -427,8 +431,8 @@ pix2pix模型原本是針對「一般圖片的風格轉換」這項工作設計�
 
 兩種地形擬真模型的訓練結果會於\textbf{~\nameref{sec:3}~}中進行探討。
 
-\section{研究結果與討論}
-\label{sec:3}
+\section{研究結果與討論\label{sec:3}}
+
 \subsection{評斷生成對抗網路模型的方法}
 一般來說，很難找到一個好的方法來評斷生成對抗網路的表現，因為它不像一般的分類器能利用分類的精確度來評斷神經網路的優劣。
 
@@ -441,7 +445,7 @@ L1 Loss的計算方式是將兩張大小相同圖像所相對應的像素值相�
 \label{eq:2}
 \end{equation}
 
-其中，h, w分別為圖片的高度及寬度。可以發現L1 Loss的數值越小，代表兩張圖越相近。藉由L1 Loss我們可以看出兩張圖的相似程度。
+其中，$h, w$分別為圖片的高度及寬度。可以發現L1 Loss的數值越小，代表兩張圖越相近。藉由L1 Loss我們可以看出兩張圖的相似程度。
 
 \subsubsection{L2 Loss}
 L2 Loss與L1 Loss的計算方式相似，只是將絕對值替換成平方，具體計算公式如式~\ref{eq:3}~：
@@ -484,7 +488,7 @@ $l(X,Y)$是用來比較$X$, $Y$兩張圖的亮度，$c(X,Y)$則是用來比較�
 
 \subsubsection{生成每張圖像所需的平均時間}
 
-我們利用PyTorch內建的\texttt{torch.cuda.Event()}來計算生成圖像所需的時間。計算完生成總時間後，就可以算出生成單張圖像所需的平均時間。在本研究中，我們是利用一張Nvidia GTX 1080 Ti 12 GB的顯示卡來進行圖像的生成。
+我們利用PyTorch內建的\texttt{torch.cuda.Event()}來計算生成圖像所需的時間。計算完生成總時間後，就可以算出生成單張圖像所需的平均時間。在本研究中，我們是利用一張NVIDIA GTX 1080 Ti 12 GB的顯示卡來進行圖像的生成。
 
 \subsection{貼圖模型之訓練結果}
 
