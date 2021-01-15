@@ -40,7 +40,7 @@
 
 \usepackage[
   top=2cm,
-  bottom=2cm,
+  bottom=1.75cm,
   left=2cm,
   right=2cm,
 %  headheight=17pt, % as per the warning by fancyhdr
@@ -478,6 +478,7 @@ L2 Loss與L1 Loss的計算方式相似，只是將絕對值替換成平方，具
 
 在計算上，我們會假設這兩個分布是服從高斯分布，且我們知道若一個隨機變數服從於高斯分布，則這個隨機變數可以使用高斯分布的標準差與平均表示，只要兩個分布的標準差和平均皆相同，則兩個分布相同。標準差和平均就是用來計算FID。但因為這裡我們要計算的是多維的向量，所以我們會使用平均和共變異數(covariance)矩陣來計算兩個分布的距離。而平均的維度是2048維，而共變異數矩陣就是一個2048 x 2048維的矩陣。有了以上的定義後，我們就可以使用式~\ref{eq:4}~來計算輸出與目標輸出的FID。
 
+
 \begin{equation}
     \mathrm{FID}(X, Y)=\left\|\mu_{X}-\mu_{Y}\right\|_{2}^{2}+\operatorname{Tr}\left(\Sigma_{X}+\Sigma_{Y}-2\left(\Sigma_{X} \Sigma_{Y}\right)^{\frac{1}{2}}\right)
     \label{eq:4}
@@ -504,6 +505,7 @@ $l(X,Y)$是用來比較$X$, $Y$兩張圖的亮度，$c(X,Y)$則是用來比較�
 \subsection{貼圖模型之訓練結果}
 
 表~\ref{tab:4}~為原pix2pix結構與VAE-pix2pix結構的貼圖模型的測試結果，其圖像皆為來自test資料集之圖像，也就是說模型並沒有在訓練過程中“看過”這些圖像。藉由觀察這些圖像，我們可以更好的評斷模型的學習程度。表~\ref{tab:5}~則為兩個模型在test資料集的平均指標值。
+
 \begin{table}[htbp]
     \centering
     \caption{原pix2pix結構及VAE-pix2pix結構的貼圖模型的測試結果}
@@ -521,6 +523,8 @@ $l(X,Y)$是用來比較$X$, $Y$兩張圖的亮度，$c(X,Y)$則是用來比較�
         VAE-pix2pix   & \textbf{18.466}  & \textbf{798.316} & \textbf{2.8969}          & 96.251          & \textbf{0.37} & 10.052                      \\ \hline
     \end{tabularx}
 \end{table}
+
+
 從表~\ref{tab:5}~可以發現我們建構的VAE-pix2pix架構相較於原pix2pix架構生成出的衛星空照圖較接近於目標輸出，不僅山脈的顏色更接近於目標輸出，且輸出的空照圖相當符合輸入高度圖的結構。這點也反映在各指標上，L1 Loss、L2 Loss、Perceptual Loss及SSIM都表現較好。
 \subsection{地形擬真模型之訓練結果}
 與貼圖模型相同，地形擬真模型的測試圖像都是來自test資料集。測試完成後，測試結果如表~\ref{tab:6}~，我們會將模型輸出與目標輸出計算出各指標，如表~\ref{tab:7}~，藉此來判斷每個模型的表現。
@@ -549,6 +553,8 @@ $l(X,Y)$是用來比較$X$, $Y$兩張圖的亮度，$c(X,Y)$則是用來比較�
 為了避免每次需要應用各模型處理高度圖時都要重新載入模型，我們利用Python的Flask套件建立了一個API伺服器，並將其建置於工作站上。用戶可以直接上傳高度圖，並在伺服器上用訓練好的各模型進行處理。這個API可以快速的在模型之間切換，且支援本研究中所有訓練的模型。
 \subsection{Unity用戶端}
 我們自行開發了一個Unity客戶端，使用戶可以在Unity Editor的編輯模式中直接對地形進行操作。使用者可以匯入一張高度圖或直接在地形上繪製3D的模型。每當畫完一筆畫後，Unity會直接對API伺服器送出請求，並在一秒內更新出擬真的山脈地形。也可以將貼圖模型所生成的擬真衛星空照圖貼在3D模型上，具體功能如圖~\ref{fig:14}~、圖~\ref{fig:15}~、圖~\ref{fig:16}~、圖~\ref{fig:17}~。
+
+
 
 \begin{figure*}
     \centering
@@ -588,38 +594,8 @@ $l(X,Y)$是用來比較$X$, $Y$兩張圖的亮度，$c(X,Y)$則是用來比較�
     \label{fig:unity}
 \end{figure*}
 
-
-
-%\begin{figure}[htbp]
-%    \centering
-%    \includegraphics[width=0.8\linewidth]{fig/14.jpg}
-%    \caption{Unity客戶端的初始畫面}
-%    \label{fig:14}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%    \centering
-%    \includegraphics[width=0.8\linewidth]{fig/15.jpg}
-%    \caption{用戶手繪之大致地形}
-%    \label{fig:15}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%    \centering
-%    \includegraphics[width=0.8\linewidth]{fig/16.jpg}
-%    \caption{經過地形擬真模型處理後的擬真地形}
-%    \label{fig:16}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%    \centering
-%    \includegraphics[width=0.8\linewidth]{fig/17.jpg}
-%    \caption{將貼圖模型的輸出貼在擬真地形上的效果}
-%    \label{fig:17}
-%\end{figure}
-
 \subsection{由用戶端調整latent code對於輸出風格的效果}
-圖~\ref{fig:18}~展示了以512 x 512的橫斷山脈模糊高度圖為輸入高度圖，並在空間上使用不同的latent code，造成模型輸出在空間上的風格差異。整張圖latent code的設置為：第一主成分由左邊界的-0.6線性增加至右邊界的0.6，第二主成分由下邊界的-0.6線性增加至上邊界的0.6，更後面的主成分皆設為0。
+圖~\ref{fig:18}~展示了以$512 \times 512$的橫斷山脈模糊高度圖為輸入高度圖，並在空間上使用不同的latent code，造成模型輸出在空間上的風格差異。整張圖latent code的設置為：第一主成分由左邊界的-0.6線性增加至右邊界的0.6，第二主成分由下邊界的-0.6線性增加至上邊界的0.6，更後面的主成分皆設為0。
 
 \begin{figure}[htbp]
     \centering
@@ -638,7 +614,9 @@ $l(X,Y)$是用來比較$X$, $Y$兩張圖的亮度，$c(X,Y)$則是用來比較�
 \end{table}
 可以發現VAE-pix2pix模型可以很好的將輸入空照圖的特徵提取出來，且也可以保留高度圖上河流及山脊等特徵。
 \subsection{討論物理侵蝕模型、pix2pix模型及VAE-pix2pix之間的差異}
-在此節中，我們會比較物理侵蝕模型、原pix2pix模型及本研究建構的VAE-pix2pix模型之間的差異，比較如表~\ref{tab:9}~。
+表~\ref{tab:9}~比較了物理侵蝕模型、原pix2pix模型及本研究建構的VAE-pix2pix模型之間的差異。
+
+雖然VAE-pix2pix模型的生成速度慢於原pix2pix模型，但其所生成圖像的品質為三者最優，還可以透過改變latent code的數值，改變生成山脈地形的風格。
 \begin{table}[htbp]
     \caption{物理侵蝕模型、原pix2pix模型及VAE-pix2pix的比較}
     \label{tab:9}
