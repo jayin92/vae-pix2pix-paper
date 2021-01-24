@@ -98,7 +98,6 @@
 \fancyhead{}
 \cfoot{\footnotesize \thepage}
 
-
 \addto\captionsenglish{%
   \renewcommand\appendixname{附錄}
   \renewcommand\appendixpagename{附錄}
@@ -110,7 +109,6 @@
 %\lhead{利用VAE-pix2pix生成擬真的山脈模型}
 %\rhead{2021臺灣國際科學展覽會研究報告}
 
-%\rfoot{李杰穎}
 
 \lstset{basicstyle=\ttfamily, keywordstyle=\bfseries}
 
@@ -211,7 +209,7 @@
         \includegraphics[width=\linewidth]{fig/1a.jpg}
         \caption{} \label{fig:1b}
     \end{subfigure}%
-    \caption{drag的值對河流連續性的影響。(a) drag = 0、(b) drag = 0.2} \label{fig:1}
+    \caption{drag的值對河流連續性的影響。(a) $drag = 0$、(b) $drag = 0.2$} \label{fig:1}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -224,11 +222,11 @@
         \includegraphics[width=\linewidth]{fig/2a.jpg}
         \caption{} \label{fig:2b}
     \end{subfigure}%
-    \caption{參數A的不同會影響所產生的地形風格。(a) A = 0.1、(b) A = 1} \label{fig:2}
+    \caption{參數A的不同會影響所產生的地形風格。(a) $A = 0.1$、(b) $A = 1$} \label{fig:2}
 \end{figure}
 
 \subsubsection{pix2pix模型}
-論文\cite{isola2017image}則為pix2pix，是一個Conditional adversarial networks(又稱 Conditional GAN)，其訓練時將一對影像當作輸入，而模型的目標則是將第一張圖片轉換為第二張圖片。例如圖~\ref{fig:3}~，模型的目標是將左圖做為輸入，輸出右邊的圖像。
+論文\cite{isola2017image}則為pix2pix，是一個Conditional adversarial networks (又稱 Conditional GAN)，其訓練時將一對影像當作輸入，而模型的目標則是將第一張圖片轉換為第二張圖片。例如圖~\ref{fig:3}~即為pix2pix可做到各種應用，而pix2pix模型的目標是將左圖做為輸入，輸出右邊的圖像。
 
 \begin{figure}[htbp]
     \centering
@@ -247,14 +245,14 @@ pix2pix由generator和discriminator兩個部分組成。generator的結構為U-N
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{fig/4.jpg}
+    \includegraphics[width=0.6\linewidth]{fig/4.jpg}
     \caption{訓練Conditional GAN將鞋子的邊緣圖生成實際鞋子的圖像。(取自\cite{isola2017image})}
     \label{fig:4}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{fig/5.jpg}
+    \includegraphics[width=0.6\linewidth]{fig/5.jpg}
     \caption{Encoder-decoder與U-Net結構比較 (取自\cite{isola2017image})}
     \label{fig:5}
 \end{figure}
@@ -264,11 +262,11 @@ pix2pix由generator和discriminator兩個部分組成。generator的結構為U-N
 \subsubsection{VAE (Variational Autoencoder)}
 Autoencoder模型為Encoder-decoder結構。運作時，輸入圖片x會被encoder編碼成latent code，再由decoder依照latent code的資訊嘗試還原出x。Latent code為整個模型結構的瓶頸，所以encoder的目標是把輸入x以最少資訊損失的方式壓縮成維數相對很小的latent code，以供decoder使用。也就是說，encoder做的是非線性降維，它會萃取輸入圖片的高階特徵。
 
-而VAE(Variational Autoencoder)\cite{kingma2013auto}類似Autoencoder，但其中encoder的輸出為平均及標準差，這兩個參數代表著一個高斯(常態)分布，訓練時latent code會從該分布中隨機取出，傳給decoder。且latent code的先驗分布會被KL divergence限制在標準高斯分布內，這些限制使VAE能學到更有意義的latent space，也方便應用。
+而VAE(Variational Autoencoder)\cite{kingma2013auto}類似Autoencoder，但其中encoder的輸出為平均及標準差，這兩個參數代表著一個高斯 (常態) 分布，訓練時latent code會從該分布中隨機取出，傳給decoder。且latent code的先驗分布會被KL divergence限制在標準高斯分布內，這些限制使VAE能學到更有意義的latent space，也方便應用。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.45\linewidth]{fig/6.jpg}
+    \includegraphics[width=0.5\linewidth]{fig/6.jpg}
     \caption{VAE的基本模型結構}
     \label{fig:6}
 \end{figure}
@@ -282,28 +280,30 @@ Autoencoder模型為Encoder-decoder結構。運作時，輸入圖片x會被encod
 \subsection{收集訓練模型所需之圖像資料}
 本研究主要會收集五個地區的地形高度圖及空照圖。這個五個地區分別為橫斷山脈、喜馬拉雅山、祕魯安地斯山脈、阿根廷及加拿大的冰河地形。透過收集不同區域的地形，使VAE-pix2pix能學到不同地區的高度圖及空照圖的特徵。
 \subsubsection{地形高度圖}
-地形高度圖的資料來源為NASA的SRTM 1 Arc-Second資料集。此資料集將1經/緯度範圍的高度資料儲存為一張高度圖，每張高度圖的編號方式是按照其高度圖左下角的座標作為檔名，若此張高度圖的收集範圍為25°N, 98°E、25°N, 99°E、24°N, 99°E、24°N, 98°E四個座標點所圍成的範圍，則此張高度圖的檔名即為N24E98，我們在附錄中會使用這種方式來表示各地區的收集範圍。
+地形高度圖的資料來源為NASA的SRTM 1 Arc-Second資料集\cite{srtm1arc}。此資料集將1經度 $\times$ 1緯度範圍的高度資料儲存為一張高度圖，每張高度圖的編號方式是按照其高度圖左下角的座標作為檔名，若此張高度圖的收集範圍為25°N, 98°E、25°N, 99°E、24°N, 99°E、24°N, 98°E四個座標點所圍成的範圍，則此張高度圖的檔名即為N24E98，我們在附錄中會使用這種方式來表示各地區的收集範圍。
 
-因為SRTM資料集採用特殊的HGT格式，不能使用一般的圖像軟體讀取，也使得生成訓練資料集的工作變得麻煩，所以我們利用gmalthgtparser來將HGT格式轉為可以直接以圖像軟體讀取的PNG格式。gmalthgtparser為一個Python module，可以讀取HGT檔案中特定地點的高度值(單位為公尺)，讀取到高度值後，我們利用式~\ref{eq:1}~將高度值轉為RGB值。
+因為SRTM資料集採用特殊的HGT格式，不能使用一般的圖像軟體讀取，也就無法作為模型的訓練資料，所以我們利用gmalthgtparser來將HGT格式轉為可以直接以圖像軟體讀取的PNG格式。gmalthgtparser為一個Python module，可以讀取HGT檔案中特定地點的高度值(單位為公尺)，讀取到高度值後，我們利用式~\ref{eq:1}~將高度值轉為RGB值。
 
 \begin{equation}
     (R, G, B)=\left(\left\lfloor\frac{\text {height}}{256^{2}}\right\rfloor,\left\lfloor\frac{\text {height } \% 256^{2}}{256^{1}}\right\rfloor,\left\lfloor\frac{\text {height } \% 256}{1}\right\rfloor\right)
     \label{eq:1}
 \end{equation}
 
-對高度值進行轉換後，我們即可以將一張HGT檔案的高度圖轉換為方便易用的PNG高度圖，轉換後的高度圖如圖~\ref{fig:7}~。
+式~\ref{eq:1}~中的$\text{height}$代表真實高度值，而$R,G,B$分別對應到圖檔的三個顏色通道。
+
+對高度值進行轉換後，我們即可以將一張HGT檔案的高度圖轉換為方便易用的PNG高度圖，轉換後的PNG高度圖如圖~\ref{fig:7}~。
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.45\linewidth]{fig/7.jpg}
-    \caption{由hgt檔案轉換的PNG圖檔}
+    \caption{由HGT檔案轉換的PNG高度圖}
     \label{fig:7}
 \end{figure}
 
 \subsubsection{衛星空照圖}
 本研究中，地形高度圖需要與衛星空照圖相互對應，所以使用MapTiler網站所提供的XYZ tiles map來收集衛星空照圖。XYZ tiles map是一種儲存地圖資料的方式，其方式為將大圖切割成許多張小圖，可以使地圖加載的速度變快，亦可節省網路資源。我們利用MapTiler所提供的衛星空照圖tiles map服務，收集橫斷山脈範圍內的多張衛星空照圖，再以EPSG:4326 (WGS 84)座標系統將各張小圖(tiles)組合成一張與地形高度圖互相對應的衛星空照圖。
 
-因為衛星空照圖需與地形高度圖相互對應，所以空照圖的收集數量要與高度圖相同。表~\ref{tab:2}~為收集五個地區的高度圖及空照圖數量，具體的收集範圍列於附錄A：
+因為衛星空照圖需與地形高度圖相互對應，所以空照圖的收集數量要與高度圖相同，且每張衛星空照圖的大小也為1經度 $\times$ 1緯度。表~\ref{tab:2}~為收集五個地區的高度圖及空照圖數量，具體的收集範圍列於附錄A：
 
 \begin{table}[htbp]
     \centering
@@ -322,6 +322,7 @@ Autoencoder模型為Encoder-decoder結構。運作時，輸入圖片x會被encod
 \subsection{pix2pix模型的訓練方式}
 pix2pix模型之訓練方式是輸入一對照片，其中一張照片為輸入，另一張照片則為目標輸出。pix2pix模型的目標即是將模型輸出盡可能接近目標輸出。在訓練過程中，我們將訓練圖像集分為三個部分，分別為train、val及test，\textbf{train是用於訓練模型，val則是在訓練過程中驗證模型的正確性，test則是在訓練完成後，用於測試模型}。
 \subsection{生成訓練資料集}
+
 我們將收集的高度圖和空照圖分為train、val及test三個區域(如圖~\ref{fig:8}~)，並分別從這三個區域中切割出訓練資料集的圖像，這樣可以使三個部分的圖像不重複，以測試模型的精準度。
 
 \begin{figure}[htbp]
@@ -334,7 +335,9 @@ pix2pix模型之訓練方式是輸入一對照片，其中一張照片為輸入�
 \subsubsection{生成貼圖模型訓練資料集}
 貼圖模型的目標是將輸入的空照圖生成相對應的高度圖，所以我們的訓練資料對即是空照圖及高度圖，其中空照圖為輸入(input)，高度圖為目標輸出(ground truth)。
 
-將圖片分割成上述的三個區域後，我們隨機在高度圖與空照圖上切割出多個$256 \times 256$大小的圖像，並將高度圖與空照圖拼接在一起，形成一個訓練資料對，如圖~\ref{fig:9}~。然後將五個地區的空照圖與高度圖一起放在同一個資料集，透過我們的模型訓練，學習到這五個地區的高度圖及空照圖中不同的特徵。
+將圖片分割成上述的三個區域後，我們隨機在高度圖與空照圖上切割出多個$256 \times 256$大小的圖像，並將高度圖透過線性變換的方式轉換為灰階的PNG高度圖，後再將高度圖與空照圖拼接在一起，形成一個訓練資料對，如圖~\ref{fig:9}~。
+
+本研究將五個地區的空照圖與高度圖一起放在同一個資料集，再利用此資料集訓練原pix2pix模型及VAE-pix2pix模型，使模型可以學習到這五個地區的高度圖及空照圖中不同的特徵。
 
 \begin{figure}[htbp]
     \centering
@@ -349,7 +352,7 @@ pix2pix模型之訓練方式是輸入一對照片，其中一張照片為輸入�
 
 訓練的資料對共有兩張圖像，分別做為輸入及目標輸出。目標輸出圖片的生成方式是從先前蒐集的地形高度圖上隨機取$256 \times 256$大小的正方形。每次選取正方形的位置都是隨機的，以增進訓練資料的一般性。
 
-至於輸入圖像，如果要用人工模仿每張目標輸出的方式畫出手繪圖，會花費很多時間。所以我們使用中值模糊的方式來快速生成輸入圖片。經過中值模糊處理後的圖片，在真實高度圖中的\textbf{大山脊上的小河谷}和\textbf{大河谷上的小凸起物}會被抹除，剩下的線條類似手繪圖的大致架構，符合模型輸入中山脈的大致架構這項條件。為了增進模型對於不同模糊程度的一般性，每張圖像的模糊程度是隨機的，也就是說中值模糊的kernel size是1\~ 29隨機的奇數。
+至於輸入圖像，如果要用人工模仿每張目標輸出的方式利用手繪的方法畫出，會花費很多時間。所以我們使用中值模糊的方式來快速生成輸入圖片。經過中值模糊處理後的圖片，在真實高度圖中的\textbf{大山脊上的小河谷}和\textbf{大河谷上的小凸起物}會被抹除，剩下的線條類似手繪圖的大致架構，符合模型輸入中山脈的大致架構這項條件。為了增進模型對於不同模糊程度的一般性，每張圖像的模糊程度是隨機的，也就是說中值模糊的kernel size是1 $\sim$ 29隨機的奇數 (中值模糊的kernel size不能為偶數)。
 
 最後，我們將中值模糊過的真實高度圖和原始的真實高度圖組成模糊-清晰資料對(如圖~\ref{fig:10}~)，用來訓練地形擬真模型。訓練資料集的train、val、test圖像數量與貼圖模型的資料集相同，如表~\ref{tab:3}~。
 
@@ -365,7 +368,7 @@ pix2pix模型之訓練方式是輸入一對照片，其中一張照片為輸入�
     \caption{貼圖模型與地形擬真模型的訓練資料的train、val、test圖像數量(單位：張)}
     \begin{tabularx}{\linewidth}{|Y|Y|Y|Y|Y|}
         \hline
-        \textbf{模型的資料集} & \textbf{train}        & \textbf{val}         & \textbf{test}        & \textbf{總計}         \\ \hhline{|=|=|=|=|=|}
+        \textbf{模型資料集} & \textbf{train}        & \textbf{val}         & \textbf{test}        & \textbf{總計}         \\ \hhline{|=|=|=|=|=|}
         貼圖模型              & \multirow{2}{*}{2560} & \multirow{2}{*}{640} & \multirow{2}{*}{400} & \multirow{2}{*}{3600} \\ \cline{1-1}
         地形擬真模型          &                       &                      &                      &                       \\ \hline
     \end{tabularx}
@@ -375,11 +378,11 @@ pix2pix模型之訓練方式是輸入一對照片，其中一張照片為輸入�
 \subsection{本研究建構的模型結構 — VAE-pix2pix}
 \label{subsec:5}
 \subsubsection{貼圖模型}
-本研究建構的模型為VAE及pix2pix的結合。pix2pix中的U-Net有強大的生成能力，負責依照高度圖生成空照圖。但是經過測試，我們發現如果只單獨提供高度圖給U-Net，它會無法反映出如雪線高度、山壁顏色等資訊。
+本研究建構的模型為VAE及pix2pix的結合。pix2pix中的U-Net有強大的生成能力，負責依照高度圖生成空照圖。但是經過測試，我們發現如果只單獨提供高度圖給U-Net，它會無法反映出如是否要生成雪以及山壁顏色等資訊。
 
-為了解決這樣的問題，我們建構了VAE-pix2pix模型，在pix2pix的U-Net前增加了style encoder (為一個VAE)，讓style encoder負責從目標空照圖提取出這些風格資訊，再由U-Net以正確的風格生成空照圖。從VAE的角度來看，此模型相當於利用U-Net作為Decoder，並在瓶頸處額外輸入高度圖作為空間資訊的VAE。\textbf{我們將建構的模型稱之為VAE-pix2pix模型}。
+為了解決這樣的問題，我們建構了VAE-pix2pix模型，在pix2pix的U-Net前增加了style encoder (為一個VAE)，讓style encoder負責從目標空照圖提取出這些風格資訊，再由U-Net以正確的風格生成空照圖。從VAE的角度來看，此模型相當於利用U-Net作為Decoder，並在瓶頸處額外輸入高度圖作為空間資訊。\textbf{我們將建構的模型稱之為VAE-pix2pix模型}。
 
-為了不限制能處理的圖片大小，本研究的style encoder不會像典型的VAE一樣產生向量作為latent code，而是會保留空間維度。
+為了不限制能處理的圖片大小，本研究的style encoder不會像典型的VAE一樣產生向量作為latent code，而是會保留空間維度。 \textbf{TOEDIT}
 
 因為style encoder的輸入中含有目標空照圖(ground truth) 的資訊，所以作為瓶頸的latent code必須足夠窄，以防止U-Net輕易的將目標空照圖直接輸出。如果輸入圖的長寬為$256 \times 256$，則VAE會將latent code縮小到一個有16 channels，長寬為$4 \times 4$的tensor。貼圖模型的結構具體如圖~\ref{fig:11}~。
 
@@ -388,7 +391,7 @@ pix2pix模型之訓練方式是輸入一對照片，其中一張照片為輸入�
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{fig/11.jpg}
-    \caption{貼圖模型的VAE-pix2pix模型結構}
+    \caption{貼圖模型的VAE-pix2pix模型結構 TOEDIT}
     \label{fig:11}
 \end{figure}
 
@@ -398,27 +401,26 @@ pix2pix模型之訓練方式是輸入一對照片，其中一張照片為輸入�
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{fig/12.jpg}
-    \caption{貼圖模型的VAE-pix2pix模型結構}
+    \caption{貼圖模型的VAE-pix2pix模型結構 TOEDIT}
     \label{fig:12}
 \end{figure}
 
 因本研究的模型結構是在pix2pix模型的基礎上額外加上VAE，所以pix2pix的部分仍然沿用論文作者的程式碼，進行訓練及測試時也是使用pix2pix原作者所提供的程式進行訓練及測試。
-生成完貼圖模型的訓練資料集後，我們先訓練最基本的pix2pix模型。我們利用pix2pix模型所提供的train.py程式碼進行訓練，訓練指令如下：
 
 
 \subsection{訓練貼圖模型}
 生成完貼圖模型的訓練資料集後，我們先訓練最基本的pix2pix模型。我們利用pix2pix模型所提供的train.py程式碼進行訓練，訓練指令如下：
 
 \begin{center}
-    \texttt{\small python train.py --model pix2pix --name pix2pix\_sat\_all -–dataroot datasets/height29 \_10km\_pix2pix\_sat\_all --direction AtoB –-input\_nc 1 -–output\_nc 3}
+    \texttt{\small python train.py --model pix2pix --name pix2pix\_sat\_all --dataroot datasets/height29 \_10km\_pix2pix\_sat\_all --direction AtoB --input\_nc 1 --output\_nc 3}
 \end{center}
 
 
 \subsection{訓練VAE-pix2pix模型}
-在~\textbf{\ref{subsec:5}\nameref{subsec:5}}~中提到我們是在pix2pix模型的架構下加入自行建構的VAE，故訓練指令與上述指令的差異只在model參數的不同，下述指令的vae\_pix2pix即為本研究的模型結構：
+在~\textbf{\ref{subsec:5}\nameref{subsec:5}}~中提到我們是在pix2pix模型的架構下加入自行建構的VAE，故訓練指令與上述指令的差異只在參數model的不同，下述指令的vae\_pix2pix即為本研究的模型結構：
 
 \begin{center}
-    \texttt{\small python train.py --model vae\_pix2pix --name vae\_sat\_all -–dataroot datasets/height29 \_10km\_pix2pix\_sat\_all --direction AtoB –-input\_nc 1 -–output\_nc 3}
+    \texttt{\small python train.py --model vae\_pix2pix --name vae\_sat\_all --dataroot datasets/height29 \_10km\_pix2pix\_sat\_all --direction AtoB --input\_nc 1 --output\_nc 3}
 \end{center}
 
 兩個貼圖模型的訓練結果會於\textbf{~\nameref{sec:res}~}中進行說明。
@@ -430,7 +432,7 @@ pix2pix模型原本是針對「一般圖片的風格轉換」這項工作設計�
 \begin{enumerate}
     \item 高度圖只有一個數值，所以設定模型的輸入(input\_nc)及輸出(output\_nc)維度皆為1。
     \item 高度圖的像素值沒有上下界的限制。為了讓輸出不因線性映射造成結果過大的失真，讓模型能均勻調整產生細節，我們把generator輸出層的激活函數(activation function) tanh去除。
-    \item 將山脈加上細節和一般的風格轉換有很大的差別：前者的輸出會沿用輸入的像素「值」作為架構(不只沿用形狀架構)，後者輸入和輸出的像素值則不必然有直接關係。所以我們在generator的最外層(也就是輸入和輸出層)加上額外的skip connection讓此層的輸出直接與模型輸入相加，成為最終的模型輸出(原本的generator第二層以下才有skip connection)。因此，模型只需要學習輸入和目標輸出的差，也就是哪裡要增高、哪裡要降低，而不用學習如何重建整個高度圖。
+    \item 將山脈加上細節和一般的風格轉換有很大的差別：前者的輸出會沿用輸入的像素「值」作為架構(不只沿用形狀架構)，後者輸入和輸出的像素值則不必然有直接關係。所以我們在generator的最外層(也就是輸入和輸出層)加上額外的skip connection讓此層的輸出直接與模型輸入相加，成為最終的模型輸出(原先的generator第二層以下才有skip connection)。因此，模型只需要學習輸入和目標輸出的差，也就是哪裡要增高、哪裡要降低，而不用學習如何重建整個高度圖。
 \end{enumerate}
 \begin{figure}[htbp]
     \centering
@@ -441,12 +443,12 @@ pix2pix模型原本是針對「一般圖片的風格轉換」這項工作設計�
 \subsubsection{訓練pix2pix結構之地形擬真模型}
 與貼圖模型相同，我們也利用pix2pix所提供的訓練程式碼來訓練模型，具體指令如下：
 \begin{center}
-    \texttt{\small python train.py --model pix2pix –-name pix2pix\_hei\_all\_med1-29 --dataroot datasets/height29\_10km\_pix2pix\_hei\_all\_med1-29 --direction AtoB –-input\_nc 1 -–output\_nc 1}
+    \texttt{\small python train.py --model pix2pix --name pix2pix\_hei\_all\_med1-29 --dataroot datasets/height29\_10km\_pix2pix\_hei\_all\_med1-29 --direction AtoB --input\_nc 1 --output\_nc 1}
 \end{center}
 \subsubsection{訓練本研究模型結構之地形擬真模型}
 而訓練本研究模型結構之地形擬真模型的具體指令如下：
 \begin{center}
-    \texttt{\small python train.py --model vae\_pix2pix -–name vae\_hei\_all --dataroot datasets/height29\_10km\_pix2pix\_sat\_all --direction AtoB –-input\_nc 1 -–output\_nc 3}
+    \texttt{\small python train.py --model vae\_pix2pix --name vae\_hei\_all --dataroot datasets/height29\_10km\_pix2pix\_sat\_all --direction AtoB --input\_nc 1 --output\_nc 3}
 \end{center}
 
 兩種地形擬真模型的訓練結果會於\textbf{~\nameref{sec:res}~}中進行探討。
@@ -485,7 +487,7 @@ L2 Loss與L1 Loss的計算方式相似，只是將絕對值替換成平方，具
 
 而計算這兩個分布的距離等同於求目標輸出和輸出的2048維特徵的距離。數學上，如果想要計算兩個分布的距離，我們可以使用Fréchet distance來進行計算。
 
-在計算上，我們會假設這兩個分布是服從高斯分布，且我們知道若一個隨機變數服從於高斯分布，則這個隨機變數可以使用高斯分布的標準差與平均表示，只要兩個分布的標準差和平均皆相同，則兩個分布相同。標準差和平均就是用來計算FID。但因為這裡我們要計算的是多維的向量，所以我們會使用平均和共變異數(covariance)矩陣來計算兩個分布的距離。而平均的維度是2048維，而共變異數矩陣就是一個2048 x 2048維的矩陣。有了以上的定義後，我們就可以使用式~\ref{eq:4}~來計算輸出與目標輸出的FID。
+在計算上，我們會假設這兩個分布是服從高斯分布，且我們知道若一個隨機變數服從於高斯分布，則這個隨機變數可以使用高斯分布的標準差與平均表示，只要兩個分布的標準差和平均皆相同，則兩個分布相同。標準差和平均就是用來計算FID。但因為這裡我們要計算的是多維的向量，所以我們會使用平均和共變異數(covariance)矩陣來計算兩個分布的距離。而平均的維度是2048維，而共變異數矩陣就是一個$2048 \times 2048$維的矩陣。有了以上的定義後，我們就可以使用式~\ref{eq:4}~來計算輸出與目標輸出的FID。
 
 
 \begin{equation}
@@ -498,8 +500,8 @@ SSIM指標\cite{wang2004image}是一種用來評斷兩張圖像相似程度的�
 SSIM指標主要透過比較兩張圖片的亮度、對比度及結構(structure)來評斷兩張圖片的相似程度，具體計算方式如式~\ref{eq:5}~：
 \begin{equation}
     \begin{array}{l}
-        \operatorname{SSIM}(\mathbf{X}, \mathbf{Y})=[l(\mathbf{X}, \mathbf{Y})]^{\alpha}[c(\mathbf{X}, \mathbf{Y})]^{\beta}[s(\mathbf{X}, \mathbf{Y})]^{\gamma}, \\
-        l(\mathbf{X}, \mathbf{Y})=\frac{2 \mu_{x} \mu_{y}+c_{1}}{\mu_{x}^{2}+\mu_{y}^{2}+c_{1}}, c(\mathbf{X}, \mathbf{Y})=\frac{2 \sigma_{x} \sigma_{y}+C_{2}}{\sigma_{x}^{2}+\sigma_{y}^{2}+C_{2}}, s(\mathbf{X}, \mathbf{Y})=\frac{\sigma_{x y}+C_{3}}{\sigma_{x} \sigma_{y}+c_{3}}
+        \operatorname{SSIM}(X, Y)=[l(X, Y)]^{\alpha}[c(X, Y)]^{\beta}[s(X, Y)]^{\gamma}, \\
+        l(X, Y)=\frac{2 \mu_{x} \mu_{y}+c_{1}}{\mu_{x}^{2}+\mu_{y}^{2}+c_{1}}, c(X, Y)=\frac{2 \sigma_{x} \sigma_{y}+C_{2}}{\sigma_{x}^{2}+\sigma_{y}^{2}+C_{2}}, s(X, Y)=\frac{\sigma_{x y}+C_{3}}{\sigma_{x} \sigma_{y}+c_{3}}
     \end{array}
     \label{eq:5}
 \end{equation}
