@@ -114,8 +114,8 @@
 
 \setCJKmainfont{Noto Serif CJK TC}
 \setmainfont{Times New Roman}
-% \setmonofont[Color={0019D4}]{Consolas}
-\setmonofont{Cascadia Code}
+\setmonofont{Consolas}
+% \setmonofont{Cascadia Code}
 \XeTeXlinebreaklocale "zh"             %這兩行一定要加，中文才能自動換行
 \XeTeXlinebreakskip = 0pt plus 1pt     %這兩行一定要加，中文才能自動換行
 \title{利用VAE-pix2pix生成擬真的山脈模型}
@@ -342,7 +342,7 @@ U-Net會輸出一張高度圖和一張紋理貼圖，其中高度圖的像素值
 \subsection{訓練模型}
 因本研究的模型結構是在pix2pix模型的基礎上修改，額外加上style encoder，所以pix2pix的部分仍然沿用論文作者的程式碼，進行訓練及測試時也是使用pix2pix原作者所提供的程式。
 
-訓練參數如下：
+\noindent 訓練參數如下：
 \begin{itemize}
 \item Epoch：500
 \item Batch size：18
@@ -350,7 +350,7 @@ U-Net會輸出一張高度圖和一張紋理貼圖，其中高度圖的像素值
 \item Beta (為KLD的乘數，用來限制latent code分布的loss)：隨時間的變化如圖十
 \end{itemize}
 	
-訓練時對資料組做的data augmentation (資料增強) 如下：
+\noindent 訓練時對資料組做的data augmentation (資料增強) 如下：
 \begin{itemize}
 \item 對模糊高度圖、衛星空照圖及真實高度圖同時作用的data augmentation：
 	\begin{itemize}
@@ -545,34 +545,34 @@ latent code的分布是判斷VAE訓練結果好壞的重要觀察項目。在本
     \centering
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{fig/12.jpg}
-        \caption[]%
-        {{\small Unity客戶端的初始畫面}}
-        \label{fig:14}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.475\textwidth}
-        \centering
         \includegraphics[width=\textwidth]{fig/13.jpg}
         \caption[]%
-        {{\small 用戶手繪之大致地形}}
-        \label{fig:15}
+        {{\small Unity客戶端的初始畫面}}
+        \label{fig:13}
     \end{subfigure}
-    \vskip\baselineskip
+    \hfill
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
         \includegraphics[width=\textwidth]{fig/14.jpg}
         \caption[]%
-        {{\small VAE-pix2pix生成的擬真地形}}
-        \label{fig:16}
+        {{\small 用戶手繪之大致地形}}
+        \label{fig:14}
     \end{subfigure}
-    \hfill
+    \vskip\baselineskip
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
         \includegraphics[width=\textwidth]{fig/15.jpg}
         \caption[]%
+        {{\small VAE-pix2pix生成的擬真地形}}
+        \label{fig:15}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{fig/16.jpg}
+        \caption[]%
         {{\small 將生成的空照圖貼在擬真地形}}
-        \label{fig:17}
+        \label{fig:16}
     \end{subfigure}
     \caption[ The average and standard deviation of critical parameters ]
     {\small Unity客戶端功能}
