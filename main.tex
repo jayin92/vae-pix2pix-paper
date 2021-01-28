@@ -239,13 +239,13 @@ Autoencoder模型為Encoder-decoder結構。運作時，輸入圖片x會被encod
 
 式~\ref{eq:1}~中的$\text{height}$代表真實高度值，而$R,G,B$分別對應到圖檔的三個顏色通道。
 
-對高度值進行轉換後，我們即可以將一張HGT檔案的高度圖轉換為方便易用的PNG高度圖，轉換後的PNG高度圖如圖~\ref{fig:7}~。
+對高度值進行轉換後，我們即可以將一張HGT檔案的高度圖轉換為方便易用的PNG高度圖，轉換後的PNG高度圖如圖~\ref{fig:5}~。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.45\linewidth]{fig/7.jpg}
+    \includegraphics[width=0.45\linewidth]{fig/5.jpg}
     \caption{由HGT檔案轉換的PNG高度圖}
-    \label{fig:7}
+    \label{fig:5}
 \end{figure}
 
 \subsubsection{衛星空照圖}
@@ -330,8 +330,6 @@ U-Net會輸出一張高度圖和一張紋理貼圖，其中高度圖的像素值
 
 最後，我們再將模糊高度圖、衛星空照圖及真實高度圖併排組成訓練資料組，如圖九。訓練時，這三張圖片會輸入到style encoder中，而style encoder提取出latent code後，latent code再與模糊高度圖一同輸入到U-Net中，最後會一起生成出擬真的衛星空照圖及高度圖。
 
-此外，訓練資料集共有3158組圖像，train資料集的資料對數為2526組，而test資料集為632組，總共為3158組圖像。
-
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{fig/10.jpg}
@@ -339,6 +337,7 @@ U-Net會輸出一張高度圖和一張紋理貼圖，其中高度圖的像素值
     \label{fig:10}
 \end{figure}
 
+此外，訓練資料集共有3158組圖像，train資料集的資料對數為2526組，而test資料集為632組，總共為3158組圖像。
 
 \subsection{訓練模型}
 因本研究的模型結構是在pix2pix模型的基礎上修改，額外加上style encoder，所以pix2pix的部分仍然沿用論文作者的程式碼，進行訓練及測試時也是使用pix2pix原作者所提供的程式。
@@ -355,14 +354,14 @@ U-Net會輸出一張高度圖和一張紋理貼圖，其中高度圖的像素值
 \begin{itemize}
 \item 對模糊高度圖、衛星空照圖及真實高度圖同時作用的data augmentation：
 	\begin{itemize}
-		\item 50% 的機率上下翻轉
-		\item 50% 的機率水平翻轉
-		\item 50% 的機率轉置XY座標(斜向翻轉)
+		\item 50 \% 的機率上下翻轉
+		\item 50 \% 的機率水平翻轉
+		\item 50 \% 的機率轉置XY座標(斜向翻轉)
 	\end{itemize}
 	\item 對模糊高度圖及真實高度圖同時作用的data augmentation：
 	\begin{itemize}
-		\item 隨機縮放：將整張圖的像素值都乘以e^x，x~N(0,0.0225) (μ為0，σ^2為0.0225的高斯分布)
-		\item 隨機偏值：將整張圖的像素值都增加x，x~N(0,4)
+		\item 隨機縮放：將整張圖的像素值都乘以$e^x, x \sim N(0,0.0225)$ ($\mu$為0，$\sigma^2$為$0.0225$的高斯分布)
+		\item 隨機偏值：將整張圖的像素值都增加$x, x\sim N(0,4)$
 	\end{itemize}
 \end{itemize}
 
@@ -486,10 +485,12 @@ latent code的分布是判斷VAE訓練結果好壞的重要觀察項目。在本
 我們從以下兩點觀察latent code分布的好壞：
 \begin{enumerate}
 \item 不同地區的latent code是否分離：
+
 由圖十一可以看出，每個地區的latent code都大致自成一個色塊，表示style encoder\textbf{能很好的分辨每種地區地形的不同特徵}。
 
 \item 所有latent code是否集中：
-由圖十二可以看出，大部分的資料點都集中成同一個連續區塊，表示在應用時，沿一個連續的路徑調整輸入的latent code，生成出的地形\textbf{風格能連續的轉換}，且藉由插值兩種地區的latent code，我們的模型可以生成出\textbf{「兩種風格的中間」}的地形，這點也反映在圖十七的測試上。不過一部分的阿根廷和加拿大冰河地形的latetnt code跑到遠處，這個問題可能要再調整beta等參數來解決。
+
+由圖十一可以看出，大部分的資料點都集中成同一個連續區塊，表示在應用時，沿一個連續的路徑調整輸入的latent code，生成出的地形\textbf{風格能連續的轉換}，且藉由插值兩種地區的latent code，我們的模型可以生成出\textbf{「兩種風格的中間」}的地形，這點也反映在圖十七的測試上。不過一部分的阿根廷和加拿大冰河地形的latetnt code跑到遠處，這個問題可能要再調整beta等參數來解決。
 \end{enumerate}
 
 \begin{figure*}
@@ -498,7 +499,7 @@ latent code的分布是判斷VAE訓練結果好壞的重要觀察項目。在本
         \centering
         \includegraphics[width=\textwidth]{fig/12a.jpg}
         \caption[]%
-        {{\small (a)}}
+        {{\small}}
         \label{fig:14}
     \end{subfigure}
     \hfill
@@ -506,7 +507,7 @@ latent code的分布是判斷VAE訓練結果好壞的重要觀察項目。在本
         \centering
         \includegraphics[width=\textwidth]{fig/12b.jpg}
         \caption[]%
-        {{\small (b)}}
+        {{\small}}
         \label{fig:15}
     \end{subfigure}
     \vskip\baselineskip
@@ -514,7 +515,7 @@ latent code的分布是判斷VAE訓練結果好壞的重要觀察項目。在本
         \centering
         \includegraphics[width=\textwidth]{fig/12c.jpg}
         \caption[]%
-        {{\small (c)}}
+        {{\small}}
         \label{fig:16}
     \end{subfigure}
     \hfill
@@ -522,11 +523,12 @@ latent code的分布是判斷VAE訓練結果好壞的重要觀察項目。在本
         \centering
         \includegraphics[width=\textwidth]{fig/12d.jpg}
         \caption[]%
-        {{\small (d)}}
+        {{\small}}
         \label{fig:17}
     \end{subfigure}
-
-    \label{fig:unity}
+    \caption[ The average and standard deviation of critical parameters ]
+    {\small 將資料組透過 style encoder 轉換後映射到 8 維 latent space 上}
+    \label{fig:latent}
 \end{figure*}
 
 
@@ -588,7 +590,8 @@ latent code的分布是判斷VAE訓練結果好壞的重要觀察項目。在本
 \end{figure}
 
 精確來說，圖十七中的latent code設置為：
-定左下角座標為(0,0)，右上角座標為(1,1)，加拿大、祕魯、阿根廷、喜馬拉雅的地區的平均latent code分別為 a,b,c,d ，則(x,y)處latent code = 3((1-x)(1-y)a + (1-x)yb + x(1-y)c + xyd)-2 ((a+b+c+d))/4。所以在接近中心處的latent code為四個地區latent code之間的內插值；在靠近邊緣及角落處的latent code則為平均latent code往四個地區latent code 的外推（extrapolation）。圖十八顯示了本研究的模型將pix2pix與style encoder結合後，使生成的地形不侷限於訓練資料的風格，能生成出其他未出現在訓練資料集，甚至不真實存在的地形風格，這項特性大大增加了模型的應用價值。
+定左下角座標為$(0,0)$，右上角座標為$(1,1)$，加拿大、祕魯、阿根廷、喜馬拉雅的地區的平均latent code分別為 $a,b,c,d$ ，則$(x,y)$處latent code $= 3((1-x)(1-y)a + (1-x)yb + x(1-y)c + xyd)-\frac{2(a+b+c+d)}{4}$。所以在接近中心處的latent code為四個地區latent code之間的內插值；在靠近邊緣及角落處的latent code則為平均latent code往四個地區latent code 的外推（extrapolation）。圖十八顯示了本研究的模型將pix2pix與style encoder結合後，使生成的地形不侷限於訓練資料的風格，能生成出其他未出現在訓練資料集，甚至不真實存在的地形風格，這項特性大大增加了模型的應用價值。
+
 在應用上，使用者也可以利用VAE-pix2pix這項能在空間上設定不同latent code的特性，增加設計地形的自由度。
 
 
