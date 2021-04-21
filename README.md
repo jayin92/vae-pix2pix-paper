@@ -11,4 +11,4 @@ In this study, we use NASA’s SRTM 1 Arc-Second dataset to collect altitude map
 
 
 ## Award / 獎項
-- 2021 臺灣國際科展 電腦科學與資訊工程科 四等獎 2021 ITSF Computer Science & Informatic Engineering Forth Award
+- 2021 臺灣國際科展 電腦科學與資訊工程科 四等獎 2021 ITSF Computer Science & Information Engineering Forth Award
